@@ -1,4 +1,5 @@
 <div align="center">
+<img src="./md-assets/tiny-server-essentials.jpg" alt="banner" />
 <p>
     <a href="https://discord.gg/TgHdvJd"><img src="https://img.shields.io/discord/413193536188579841?color=7289da&logo=discord&logoColor=white" alt="Discord server" /></a>
     <a href="https://www.npmjs.com/package/tiny-server-essentials"><img src="https://img.shields.io/npm/v/tiny-server-essentials.svg?maxAge=3600" alt="NPM version" /></a>

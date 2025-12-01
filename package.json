@@ -1,6 +1,6 @@
 {
   "name": "tiny-server-essentials",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A good utility toolkit to unify Express v5 and Socket.IO v4 into a seamless development experience with modular helpers, server wrappers, and WebSocket tools.",
   "scripts": {
     "test": "npm run test:mjs && npm run test:cjs && npm run test:js",
@@ -95,6 +95,6 @@
     "express": "^5.1.0",
     "http-errors": "^2.0.0",
     "socket.io": "^4.8.1",
-    "tiny-essentials": "^1.22.1"
+    "tiny-essentials": "^1.24.3"
   }
 }
