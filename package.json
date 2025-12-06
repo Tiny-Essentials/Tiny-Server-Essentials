@@ -31,6 +31,26 @@
     ".": {
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs"
+    },
+    "./proxy": {
+      "require": "./dist/proxy/index.cjs",
+      "import": "./dist/proxy/index.mjs"
+    },
+    "./proxy/client": {
+      "require": "./dist/proxy/client/index.cjs",
+      "import": "./dist/proxy/client/index.mjs"
+    },
+    "./proxy/client/user": {
+      "require": "./dist/proxy/client/proxyUser.cjs",
+      "import": "./dist/proxy/client/proxyUser.mjs"
+    },
+    "./proxy/client/onConnection": {
+      "require": "./dist/proxy/client/proxyOnConnection.cjs",
+      "import": "./dist/proxy/client/proxyOnConnection.mjs"
+    },
+    "./proxy/server": {
+      "require": "./dist/proxy/server/index.cjs",
+      "import": "./dist/proxy/server/index.mjs"
     }
   },
   "repository": {
@@ -95,6 +115,7 @@
     "express": "^5.1.0",
     "http-errors": "^2.0.0",
     "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "tiny-essentials": "^1.24.3"
   }
 }
