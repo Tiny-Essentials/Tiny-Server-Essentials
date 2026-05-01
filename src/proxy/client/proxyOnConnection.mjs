@@ -79,7 +79,7 @@ import SocketIoProxyUser from './proxyUser.mjs';
  *   Optional proxy instance responsible for forwarding events between servers
  * @param {ProxyOnConnection} callback
  *   Function executed when either local or proxied users connect
- * 
+ *
  * @beta
  */
 const proxyOnConnection = (io, proxy, callback) => {

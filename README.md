@@ -46,6 +46,14 @@ With this toolkit, you can:
 
 ---
 
+## Build 📦
+
+To get started, please install the project dependencies. It is **mandatory** to run the build command afterward to ensure the module works correctly:
+```bash
+npm install
+npm run build:essentials
+```
+
 ## 🗂️ Where is everything?
 
 You can find detailed documentation about each module in the [docs overview](./docs), where all core components like Express, Instance, Io, and Utils are explained clearly.

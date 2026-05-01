@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import { isJsonObject } from 'tiny-essentials';
+import { isJsonObject } from '../../tiny-modules/basics/objChecker.mjs';
 
 import fixProxyArgs from './proxyArgs.mjs';
 
@@ -24,7 +24,7 @@ import fixProxyArgs from './proxyArgs.mjs';
  * - Namespace information
  *
  * These are updated whenever the proxy sends new data.
- * 
+ *
  * @beta
  */
 class SocketIoProxyUser extends EventEmitter {

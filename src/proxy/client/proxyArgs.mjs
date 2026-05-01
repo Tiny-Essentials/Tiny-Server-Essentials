@@ -10,7 +10,7 @@
  *
  * @param {any[]} args Arguments that will be forwarded through the proxy system
  * @returns {any[]} The processed or unmodified argument list
- * 
+ *
  * @beta
  */
 const fixProxyArgs = (args) => {

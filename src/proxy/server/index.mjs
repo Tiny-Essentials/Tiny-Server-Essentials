@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { Server } from 'socket.io';
-import { isJsonObject, TinyRateLimiter } from 'tiny-essentials';
+import { isJsonObject } from '../../tiny-modules/basics/objChecker.mjs';
+import TinyRateLimiter from '../../tiny-modules/libs/TinyRateLimiter.mjs';
 
 /**
  * @typedef {Object} ProxyUserDisconnect
@@ -74,7 +75,7 @@ import { isJsonObject, TinyRateLimiter } from 'tiny-essentials';
  * It is effectively a "virtualized mirror" of all socket activity,
  * allowing external systems to observe and interact with real users
  * without having direct access to the socket server runtime.
- * 
+ *
  * @beta
  */
 class SocketIoProxyServer extends EventEmitter {

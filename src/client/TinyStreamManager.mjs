@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { TinyPromiseQueue } from 'tiny-essentials';
+import TinyPromiseQueue from '../tiny-modules/libs/TinyPromiseQueue.mjs';
 import VolumeMeter from './VolumeMeter.mjs';
 import TinyMediaReceiver from './TinyMediaReceiver.mjs';
 

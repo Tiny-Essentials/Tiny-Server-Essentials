@@ -31,7 +31,7 @@ import fixProxyArgs from './proxyArgs.mjs';
  * 4. You can broadcast events through `.to(room).emit()`.
  *
  * When destroyed, all listeners and user references are cleaned up.
- * 
+ *
  * @beta
  */
 class SocketIoProxyClient extends EventEmitter {
