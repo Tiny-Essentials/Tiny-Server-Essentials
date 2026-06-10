@@ -88,7 +88,7 @@ Feel free to fork, contribute, and create pull requests for improvements! Whethe
 
 ## 📝 License
 
-This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the LGPL-3.0 License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
