@@ -31,7 +31,7 @@ const insertExpress = (app, http) => {
 
   app.get('/js/TinyStreamManager.js', (req, res) =>
     http.sendFile(res, {
-      file: fs.readFileSync(path.join(__dirname, '../../../dist/client/TinyStreamManager.js')),
+      file: fs.readFileSync(path.join(__dirname, '../../../dist/client/TinyStreamManager.min.js')),
       fileMaxAge: 0,
       lastModified: new Date(),
       contentType: 'application/javascript',

@@ -19,6 +19,25 @@
         background: #4caf50;
         width: 0%;
       }
+      .controls-container {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #f9f9f9;
+      }
+      .selector-group {
+        margin-bottom: 10px;
+      }
+      .selector-group label {
+        display: inline-block;
+        width: 120px;
+        font-weight: bold;
+      }
+      .selector-group select {
+        width: 300px;
+        padding: 5px;
+      }
     </style>
   </head>
 
@@ -27,8 +46,27 @@
     <h2><a href="./pudding.txt" target="_blank">Pudding! :3</a></h2>
     <p>This is a very simple HTML5 page.</p>
 
-    <button id="active-stream">Active Stream</button>
-    <button id="active-stream-2">Active Quiet Stream</button>
+    <div class="controls-container">
+      <h3>Device Authorization & Selection</h3>
+      <button id="request-permissions">1. Request Camera/Mic Permissions</button>
+
+      <div class="selector-group" style="margin-top: 15px">
+        <label for="audio-source">Microphone:</label>
+        <select id="audio-source" disabled>
+          <option value="">Select a microphone...</option>
+        </select>
+      </div>
+
+      <div class="selector-group">
+        <label for="video-source">Camera:</label>
+        <select id="video-source" disabled>
+          <option value="">Select a camera...</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="active-stream" disabled>Active Stream</button>
+    <button id="active-stream-2" disabled>Active Quiet Stream</button>
 
     <p>Local volume</p>
     <div id="progressContainer">
@@ -53,6 +91,13 @@
       const socket = io('http://localhost:3050');
       const manager = new TinyStreamManager();
 
+      // Elements
+      const btnRequest = document.getElementById('request-permissions');
+      const btnActiveStream = document.getElementById('active-stream');
+      const btnActiveStream2 = document.getElementById('active-stream-2');
+      const audioSelect = document.getElementById('audio-source');
+      const videoSelect = document.getElementById('video-source');
+
       // Mic
       manager.on(manager.Events.Mic, (data, metadata) =>
         socket.emit('mic', data, { time: Date.now() }),
@@ -73,33 +118,101 @@
         progressBar.style.width = Number(data.perc) + '%';
       });
 
-      async function startAll(isQuiet = false) {
-        console.log(!isQuiet);
-        // Usa dispositivos específicos se quiser
-        await manager.startMic(
-          {
-            deviceId: { exact: 'default' },
-            echoCancellation: false,
-            noiseSuppression: false,
-            autoGainControl: false,
-            highpassFilter: false,
-          },
-          !isQuiet,
-        );
+      /**
+       * Populates the HTML select elements with authorized system media devices.
+       * @returns {Promise<void>}
+       */
+      async function populateDeviceSelectors() {
+        try {
+          await manager.updateDeviceList();
 
-        await manager.startCam();
+          const audioDevices = manager.getDevicesByKind('audio');
+          const videoDevices = manager.getDevicesByKind('video');
+
+          audioSelect.innerHTML = '';
+          videoSelect.innerHTML = '';
+
+          audioDevices.forEach((device) => {
+            const option = document.createElement('option');
+            option.value = device.deviceId;
+            option.text = device.label || `Microphone ${audioSelect.length + 1}`;
+            audioSelect.appendChild(option);
+          });
+
+          videoDevices.forEach((device) => {
+            const option = document.createElement('option');
+            option.value = device.deviceId;
+            option.text = device.label || `Camera ${videoSelect.length + 1}`;
+            videoSelect.appendChild(option);
+          });
+
+          audioSelect.disabled = false;
+          videoSelect.disabled = false;
+          btnActiveStream.disabled = false;
+          btnActiveStream2.disabled = false;
+        } catch (error) {
+          console.error('Error enumerating devices:', error);
+        }
+      }
+
+      /**
+       * Requests explicit user permission to access camera and microphone.
+       * @returns {Promise<void>}
+       */
+      async function requestInitialPermissions() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+          console.log(stream);
+          stream.getTracks().forEach((track) => track.stop());
+          await populateDeviceSelectors();
+          btnRequest.textContent = 'Permissions Granted ✓';
+          btnRequest.disabled = true;
+        } catch (error) {
+          console.error('Permission denied or error occurred:', error);
+          alert('Media permissions are required for device selection.');
+        }
+      }
+
+      /**
+       * Starts the streams using the selected device IDs.
+       * @param {boolean} [isQuiet=false] - Defines if the stream should suppress UI meters or initial alerts.
+       * @returns {Promise<void>}
+       */
+      async function startAll(isQuiet = false) {
+        const selectedAudioId = audioSelect.value;
+        const selectedVideoId = videoSelect.value;
+
+        const micConstraints = {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false,
+          highpassFilter: false,
+        };
+
+        if (selectedAudioId) {
+          micConstraints.deviceId = { exact: selectedAudioId };
+        } else {
+          micConstraints.deviceId = { exact: 'default' };
+        }
+
+        const camConstraints = {};
+        if (selectedVideoId) {
+          camConstraints.deviceId = { exact: selectedVideoId };
+        }
+
+        await manager.startMic(micConstraints, !isQuiet);
+        await manager.startCam(camConstraints);
         await manager.startScreen(true, !isQuiet);
 
-        // Lista todos os dispositivos
-        await manager.updateDeviceList();
         console.table(manager.getDevicesByKind('audio'));
         console.table(manager.getDevicesByKind('video'));
         console.table(manager.getDevicesByKind('speaker'));
       }
 
-      // Active stream buttons
-      document.getElementById('active-stream').addEventListener('click', () => startAll(false));
-      document.getElementById('active-stream-2').addEventListener('click', () => startAll(true));
+      // Event Listeners
+      btnRequest.addEventListener('click', requestInitialPermissions);
+      btnActiveStream.addEventListener('click', () => startAll(false));
+      btnActiveStream2.addEventListener('click', () => startAll(true));
     </script>
 
     <script>
@@ -136,21 +249,21 @@
       });
 
       socket.on('mic', (data, metadata) => {
-        const { userId, time } = metadata;
+        const { userId } = metadata;
         const { mime, streamData } = data;
         const receiver = manager.initReceiver(userId, 'mic', mime, audio);
         receiver.pushChunk(streamData);
       });
 
       socket.on('cam', (data, metadata) => {
-        const { userId, time } = metadata;
+        const { userId } = metadata;
         const { mime, streamData } = data;
         const receiver = manager.initReceiver(userId, 'cam', mime, video);
         receiver.pushChunk(streamData);
       });
 
       socket.on('screen', (data, metadata) => {
-        const { userId, time } = metadata;
+        const { userId } = metadata;
         const { mime, streamData } = data;
         const receiver = manager.initReceiver(userId, 'screen', mime, screenVideo);
         receiver.pushChunk(streamData);
