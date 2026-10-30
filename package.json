@@ -13,7 +13,7 @@
     "prettier:webpack.config": "prettier --write ./webpack.config.mjs",
     "auto-build": "npm run build",
     "build": "npm run build:essentials && npm run build:js",
-    "build:essentials": "npx tiny-essentials-fork --out-dir=src/tiny-modules basics/objChecker/isJsonObject libs/TinyPromiseQueue libs/TinyRateLimiter",
+    "build:essentials": "npx tiny-essentials-fork --out-dir=src/tiny-modules basics/objChecker/isJsonObject libs/utils/TinyPromiseQueue libs/math/TinyRateLimiter",
     "build:js": "tsc -p tsconfig.json && rollup -c && webpack --mode production",
     "build-clean": "npm run clean && npm run build",
     "build-dist": "npm run build",
