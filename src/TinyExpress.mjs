@@ -418,13 +418,9 @@ class TinyExpress {
       typeof req.headers.host === 'string' ? this.web.canDomain(req.headers.host) : false,
     );
 
+    this.addIpExtractor('remoteAddress', (req) => extractIpList(req.socket?.remoteAddress));
     this.addIpExtractor('ip', (req) => extractIpList(req.ip));
     this.addIpExtractor('ips', (req) => extractIpList(req.ips));
-    this.addIpExtractor('remoteAddress', (req) => extractIpList(req.socket?.remoteAddress));
-    this.addIpExtractor('x-forwarded-for', (req) => extractIpList(req.headers['x-forwarded-for']));
-    this.addIpExtractor('fastly-client-ip', (req) =>
-      extractIpList(req.headers['fastly-client-ip']),
-    );
   }
 
   /**
