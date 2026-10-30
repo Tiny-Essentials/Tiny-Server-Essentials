@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { Server } from 'socket.io';
 import { isJsonObject } from '../../tiny-modules/basics/objChecker.mjs';
-import TinyRateLimiter from '../../tiny-modules/libs/TinyRateLimiter.mjs';
+import TinyRateLimiter from '../../tiny-modules/libs/math/TinyRateLimiter.mjs';
 
 /**
  * @typedef {Object} ProxyUserDisconnect
