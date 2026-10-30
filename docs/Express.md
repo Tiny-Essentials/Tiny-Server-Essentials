@@ -323,7 +323,9 @@ appManager.addIpExtractor('fastly-client-ip', (req) =>
 ➖ **Remove a registered extractor**.
 
 ```js
-appManager.removeIpExtractor('custom');
+appManager.addIpExtractor('remoteAddress');
+appManager.addIpExtractor('ip');
+appManager.addIpExtractor('ips');
 ```
 
 > ❗ You can't remove the one that's currently active.
