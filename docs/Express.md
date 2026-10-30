@@ -307,7 +307,13 @@ If the header is invalid, the result includes:
 ➕ **Register a new IP extractor**.
 
 ```js
-appManager.addIpExtractor('custom', (req) => extractIpList(req.headers['x-real-ip']));
+appManager.addIpExtractor('x-forwarded-for', (req) => extractIpList(req.headers['x-forwarded-for']));
+```
+
+```js
+appManager.addIpExtractor('fastly-client-ip', (req) =>
+    extractIpList(req.headers['fastly-client-ip']),
+);
 ```
 
 > ❗ Key `"DEFAULT"` is reserved.
